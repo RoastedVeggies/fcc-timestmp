@@ -19,12 +19,20 @@ app.get("/", (request, response) => {
 // Simple in-memory store
 const dreams = [
   "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
+  "Make a rap album"
+]
+
+const rap = [
+  "Count money",
+  "Make a rap album"
 ]
 
 app.get("/dreams", (request, response) => {
   response.send(dreams)
+})
+
+app.get("/tupac", (request, response) => {
+  response.sendFile(__dirname + '/views/rap.html')
 })
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
