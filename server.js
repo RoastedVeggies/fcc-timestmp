@@ -12,34 +12,67 @@ const app = express()
 app.use(express.static('public'))
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", (request, response) => {
-  response.sendFile(__dirname + '/views/index.html')
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + '/views/index.html')
 })
 
-// Simple in-memory store
-const dreams = [
-  "Find and count some sheep",
-  "Make a rap album"
-]
-
-const rap = [
-  "Count money",
-  "Make a rap album"
-]
-
-app.get("/dreams", (request, response) => {
-  response.send(dreams)
+app.get("/:date", (req,res)=>{
+  var date = new Date(req.params.date);
+  if(date == 'Invalid Date'){
+     date = new Date((req.params.date)*1000); 
+  }
+  console.log(date);
+  //correct unix date is found by multiplying by 1000
+  //var date = new Date((req.params.date)*1000);
+   if(date > 0){ 
+    var natural = month(date.getMonth())+' '+date.getDate()+', '+date.getFullYear();
+    res.send({unix:(date.getTime())/1000,natural:natural})
+   }else{
+    res.send({unix:null, natural:null}); 
+   }
 })
 
-app.get("/tupac", (request, response) => {
-  response.sendFile(__dirname + '/views/rap.html')
-})
+function month(i){
+  switch(i){
+    case 0:
+      return "Janurary"
+      break;
+    case 1:
+      return "February"
+      break;
+    case 2:
+      return "March"
+      break;
+    case 3:
+      return "April"
+      break;
+    case 4:
+      return "May"
+      break;
+    case 5:
+      return "June"
+      break;
+    case 6:
+      return "July"
+      break;
+    case 7:
+      return "August"
+      break;
+    case 8:
+      return "September"
+      break;
+    case 9:
+      return "October"
+      break;
+    case 10:
+      return "November"
+      break;
+    case 11:
+      return "December"
+      break;
+  }
+}
 
-// could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
-app.post("/dreams", (request, response) => {
-  dreams.push(request.query.dream)
-  response.sendStatus(200)
-})
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {
